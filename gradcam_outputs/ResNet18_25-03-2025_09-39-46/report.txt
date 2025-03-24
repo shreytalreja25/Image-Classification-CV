@@ -1,0 +1,19 @@
+Grad-CAM Report
+Model: ResNet-18
+Timestamp: 25-03-2025_09-39-46
+
+004.jpg → Predicted: Lake
+003.jpg → Predicted: Airport
+020.jpg → Predicted: Beach
+006.jpg → Predicted: City
+005.jpg → Predicted: Desert
+001.jpg → Predicted: Forest
+001.jpg → Predicted: Grassland
+005.jpg → Predicted: Highway
+009.jpg → Predicted: Lake
+008.jpg → Predicted: Mountain
+005.jpg → Predicted: Parking
+004.jpg → Predicted: Port
+003.jpg → Predicted: Railway
+008.jpg → Predicted: Residential
+001.jpg → Predicted: River

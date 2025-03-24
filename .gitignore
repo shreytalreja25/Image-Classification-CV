@@ -1,0 +1,9 @@
+# .gitignore
+venv/
+__pycache__/
+*.log
+.cache/
+*.pth
+*.egg-info/
+archive/
+data/

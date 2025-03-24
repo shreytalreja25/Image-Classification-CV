@@ -1,0 +1,31 @@
+Evaluation Timestamp: 25-03-2025_09-23-47
+Model: SIFT + SGDClassifier (Linear SVM Approximation)
+
+Summary Metrics:
+  accuracy: 0.1417
+  precision_macro: 0.1426
+  recall_macro: 0.1417
+  f1_macro: 0.1353
+
+Full Classification Report:
+              precision    recall  f1-score   support
+
+ Agriculture     0.1441    0.1000    0.1181       160
+     Airport     0.0602    0.0312    0.0412       160
+       Beach     0.0968    0.0750    0.0845       160
+        City     0.1538    0.1125    0.1300       160
+      Desert     0.3198    0.4437    0.3717       160
+      Forest     0.2435    0.2938    0.2663       160
+   Grassland     0.0897    0.1250    0.1044       160
+     Highway     0.0778    0.0813    0.0795       160
+        Lake     0.1529    0.0813    0.1061       160
+    Mountain     0.0874    0.1000    0.0933       160
+     Parking     0.0856    0.1187    0.0995       160
+        Port     0.2000    0.0938    0.1277       160
+     Railway     0.1857    0.0813    0.1130       160
+ Residential     0.1330    0.1688    0.1488       160
+       River     0.1087    0.2188    0.1452       160
+
+    accuracy                         0.1417      2400
+   macro avg     0.1426    0.1417    0.1353      2400
+weighted avg     0.1426    0.1417    0.1353      2400

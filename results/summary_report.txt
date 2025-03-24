@@ -1,0 +1,5 @@
+Model                                           | Accuracy | Macro F1 | Timestamp          
+------------------------------------------------|----------|----------|--------------------
+EfficientNet-B0 (fine-tuned)                    | 95.46%   | 95.45%   | 25-03-2025_09-06-31
+SIFT + SGDClassifier (Linear SVM Approximation) | 14.17%   | 13.53%   | 25-03-2025_09-23-47
+ResNet-18 (fine-tuned)                          | 90.71%   | 90.68%   | 25-03-2025_09-29-41
