@@ -8,3 +8,4 @@ __pycache__/
 archive/
 data/
 models/rf_classifier.joblib
+models/*.joblib
