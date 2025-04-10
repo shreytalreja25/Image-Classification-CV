@@ -30,19 +30,16 @@ def run_batch_gradcam(model_path="models/resnet18_finetuned.pth"):
 
         for cls in class_names:
             class_dir = os.path.join(test_dir, cls)
-            if not os.path.isdir(class_dir):
-                continue
+            if not os.path.isdir(class_dir): continue
 
             images = os.listdir(class_dir)
-            if not images:
-                continue
+            if not images: continue
 
             image_path = os.path.join(class_dir, images[0])
             pred_class = generate_gradcam(model, image_path, class_names, output_dir, model_name="resnet")
-            log_file.write(f"{os.path.basename(image_path)} → Predicted: {pred_class}\n")
+            log_file.write(f"{os.path.basename(image_path)} | Original: {cls} | Predicted: {pred_class}\n")
 
     print(f"\n✅ ResNet Grad-CAM report saved to: {log_path}")
-
 
 def run_batch_gradcam_efficientnet(model_path="models/efficientnet_b0.pth"):
     print("\n📸 Generating Grad-CAM for EfficientNet-B0...")
@@ -68,19 +65,16 @@ def run_batch_gradcam_efficientnet(model_path="models/efficientnet_b0.pth"):
 
         for cls in class_names:
             class_dir = os.path.join(test_dir, cls)
-            if not os.path.isdir(class_dir):
-                continue
+            if not os.path.isdir(class_dir): continue
 
             images = os.listdir(class_dir)
-            if not images:
-                continue
+            if not images: continue
 
             image_path = os.path.join(class_dir, images[0])
             pred_class = generate_gradcam(model, image_path, class_names, output_dir, model_name="efficientnet")
-            log_file.write(f"{os.path.basename(image_path)} → Predicted: {pred_class}\n")
+            log_file.write(f"{os.path.basename(image_path)} | Original: {cls} | Predicted: {pred_class}\n")
 
     print(f"\n✅ EfficientNet Grad-CAM report saved to: {log_path}")
-
 
 def run_batch_gradcam_mobilenet(model_path="models/mobilenet_v2.pth"):
     print("\n📸 Generating Grad-CAM for MobileNetV2...")
@@ -106,15 +100,13 @@ def run_batch_gradcam_mobilenet(model_path="models/mobilenet_v2.pth"):
 
         for cls in class_names:
             class_dir = os.path.join(test_dir, cls)
-            if not os.path.isdir(class_dir):
-                continue
+            if not os.path.isdir(class_dir): continue
 
             images = os.listdir(class_dir)
-            if not images:
-                continue
+            if not images: continue
 
             image_path = os.path.join(class_dir, images[0])
             pred_class = generate_gradcam(model, image_path, class_names, output_dir, model_name="mobilenet")
-            log_file.write(f"{os.path.basename(image_path)} → Predicted: {pred_class}\n")
+            log_file.write(f"{os.path.basename(image_path)} | Original: {cls} | Predicted: {pred_class}\n")
 
     print(f"\n✅ MobileNet Grad-CAM report saved to: {log_path}")

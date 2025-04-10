@@ -1,0 +1,19 @@
+Grad-CAM Report
+Model: ResNet-18
+Timestamp: 10-04-2025_18-13-16
+
+004.jpg | Original: Agriculture | Predicted: ('Agriculture', 'Lake')
+003.jpg | Original: Airport | Predicted: ('Airport', 'Airport')
+020.jpg | Original: Beach | Predicted: ('Beach', 'Beach')
+006.jpg | Original: City | Predicted: ('City', 'City')
+005.jpg | Original: Desert | Predicted: ('Desert', 'Desert')
+001.jpg | Original: Forest | Predicted: ('Forest', 'Forest')
+001.jpg | Original: Grassland | Predicted: ('Grassland', 'Grassland')
+005.jpg | Original: Highway | Predicted: ('Highway', 'Highway')
+009.jpg | Original: Lake | Predicted: ('Lake', 'Lake')
+008.jpg | Original: Mountain | Predicted: ('Mountain', 'Mountain')
+005.jpg | Original: Parking | Predicted: ('Parking', 'Parking')
+004.jpg | Original: Port | Predicted: ('Port', 'Port')
+003.jpg | Original: Railway | Predicted: ('Railway', 'Railway')
+008.jpg | Original: Residential | Predicted: ('Residential', 'Residential')
+001.jpg | Original: River | Predicted: ('River', 'River')

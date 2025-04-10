@@ -1,0 +1,32 @@
+Evaluation Timestamp: 10-04-2025_17-19-35
+Model: EfficientNet-B0 (fine-tuned)
+Device: cuda
+
+Summary Metrics:
+  accuracy: 0.9533
+  precision_macro: 0.9553
+  recall_macro: 0.9533
+  f1_macro: 0.9534
+
+Full Classification Report:
+              precision    recall  f1-score   support
+
+ Agriculture     0.9536    0.9000    0.9260       160
+     Airport     0.9017    0.9750    0.9369       160
+       Beach     0.9398    0.9750    0.9571       160
+        City     0.9745    0.9563    0.9653       160
+      Desert     0.9070    0.9750    0.9398       160
+      Forest     0.9682    0.9500    0.9590       160
+   Grassland     0.9627    0.9688    0.9657       160
+     Highway     0.9933    0.9250    0.9579       160
+        Lake     0.9934    0.9375    0.9646       160
+    Mountain     0.9573    0.9812    0.9691       160
+     Parking     1.0000    0.9500    0.9744       160
+        Port     0.9123    0.9750    0.9426       160
+     Railway     0.8864    0.9750    0.9286       160
+ Residential     1.0000    0.9812    0.9905       160
+       River     0.9790    0.8750    0.9241       160
+
+    accuracy                         0.9533      2400
+   macro avg     0.9553    0.9533    0.9534      2400
+weighted avg     0.9553    0.9533    0.9534      2400

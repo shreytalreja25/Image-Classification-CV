@@ -1,0 +1,31 @@
+Evaluation Timestamp: 10-04-2025_17-10-01
+Model: MobileNetV2
+
+Summary Metrics:
+  accuracy: 0.9300
+  precision_macro: 0.9310
+  recall_macro: 0.9300
+  f1_macro: 0.9302
+
+Full Classification Report:
+              precision    recall  f1-score   support
+
+ Agriculture     0.9625    0.9625    0.9625       160
+     Airport     0.8903    0.8625    0.8762       160
+       Beach     0.9497    0.9437    0.9467       160
+        City     0.9463    0.8812    0.9126       160
+      Desert     0.9682    0.9500    0.9590       160
+      Forest     0.9387    0.9563    0.9474       160
+   Grassland     0.9613    0.9313    0.9460       160
+     Highway     0.8947    0.9563    0.9245       160
+        Lake     0.8957    0.9125    0.9040       160
+    Mountain     0.9618    0.9437    0.9527       160
+     Parking     0.9935    0.9563    0.9745       160
+        Port     0.9255    0.9313    0.9283       160
+     Railway     0.8276    0.9000    0.8623       160
+ Residential     0.9455    0.9750    0.9600       160
+       River     0.9045    0.8875    0.8959       160
+
+    accuracy                         0.9300      2400
+   macro avg     0.9310    0.9300    0.9302      2400
+weighted avg     0.9310    0.9300    0.9302      2400
