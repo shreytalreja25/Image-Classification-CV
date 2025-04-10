@@ -14,10 +14,10 @@ import joblib
 CACHE_DIR = "cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-def extract_sift_features(image_path, max_descriptors=100):
+def extract_sift_features(image_path, max_descriptors=500):
     try:
         img = cv2.imread(image_path, 0)
-        sift = cv2.SIFT_create()
+        sift = cv2.SIFT_create(nfeatures=max_descriptors)
         keypoints, descriptors = sift.detectAndCompute(img, None)
         if descriptors is None:
             return np.zeros((max_descriptors, 128)).flatten()
@@ -32,7 +32,7 @@ def extract_sift_features(image_path, max_descriptors=100):
     except:
         return None
 
-def prepare_data(data_dir, max_descriptors=100, use_pca=True, pca_dim=100):
+def prepare_data(data_dir, max_descriptors=500, use_pca=True, pca_dim=300):
     cache_name = f"{'pca' if use_pca else 'nopca'}_{os.path.basename(data_dir)}_sift_{max_descriptors}.npz"
     cache_path = os.path.join(CACHE_DIR, cache_name)
 
@@ -67,18 +67,19 @@ def prepare_data(data_dir, max_descriptors=100, use_pca=True, pca_dim=100):
     if use_pca:
         print("Applying PCA to reduce dimensionality...")
         pca_obj = PCA(n_components=pca_dim)
+        # pca_obj = PCA()
         X = pca_obj.fit_transform(X)
 
     print(f"Caching features to {cache_path}")
     np.savez_compressed(cache_path, X=X, y=y, labels=labels, pca=pca_obj)
 
-    return X, y, label_encoder, pca_obj
+    return X, y, labels, pca_obj
 
 def train_svm(X_train, y_train):
     print("\nTraining SVM classifier (SIFT + SVM)... This may take a few minutes.")
     start_time = time.time()
-
-    clf = SVC(kernel='linear', probability=True)
+    
+    clf = SVC(kernel='linear', probability=True, verbose=1)
     clf.fit(X_train, y_train)
 
     duration = time.time() - start_time
@@ -94,8 +95,13 @@ def train_svm(X_train, y_train):
 
 def evaluate(clf, X_test, y_test, label_encoder):
     print("\nEvaluating model...")
+
+    # label_encoder = LabelEncoder()
+    # labels = label_encoder.classes_.tolist()
+
+
     preds = clf.predict(X_test)
-    class_names = label_encoder.classes_
+    class_names = label_encoder
     report = classification_report(y_test, preds, target_names=class_names, digits=4)
     metrics = evaluate_classification(y_test, preds, class_names, verbose=False)
 

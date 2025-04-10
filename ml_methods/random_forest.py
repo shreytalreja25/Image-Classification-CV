@@ -38,7 +38,16 @@ def prepare_data(data_dir, max_descriptors=100, use_pca=True, pca_dim=100):
     if os.path.exists(cache_path):
         print(f"\nLoading cached features from {cache_path}")
         cache = np.load(cache_path, allow_pickle=True)
-        return cache["X"], cache["y"], cache["labels"].tolist(), cache.get("pca", None)
+        X = cache["X"]
+        y = cache["y"]
+        labels = cache["labels"]
+
+        # Restore LabelEncoder properly
+        label_encoder = LabelEncoder()
+        label_encoder.classes_ = labels
+
+        pca_obj = cache["pca"] if "pca" in cache.files else None
+        return X, y, label_encoder, pca_obj
 
     print(f"\nExtracting features from: {data_dir}")
     X, y = [], []
@@ -60,7 +69,7 @@ def prepare_data(data_dir, max_descriptors=100, use_pca=True, pca_dim=100):
 
     X = np.array(X)
     y = label_encoder.fit_transform(y)
-    labels = label_encoder.classes_.tolist()
+    labels = label_encoder.classes_
 
     pca_obj = None
     if use_pca:
@@ -74,17 +83,19 @@ def prepare_data(data_dir, max_descriptors=100, use_pca=True, pca_dim=100):
     return X, y, label_encoder, pca_obj
 
 def train_rf(X_train, y_train):
-    print("\nTraining Random Forest classifier...")
+    print("\n🌲 Training Random Forest classifier...")
     clf = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1)
     clf.fit(X_train, y_train)
-    print("Training complete.")
+    print("✅ Training complete.")
+
     os.makedirs("models", exist_ok=True)
-    joblib.dump(clf, "models/rf_classifier.joblib")
-    print("Model saved to: models/rf_classifier.joblib")
+    model_path = "models/rf_classifier.joblib"
+    joblib.dump(clf, model_path)
+    print(f"💾 Model saved to: {model_path}")
     return clf
 
 def evaluate(clf, X_test, y_test, label_encoder):
-    print("\nEvaluating model...")
+    print("\n🔍 Evaluating model...")
     preds = clf.predict(X_test)
     class_names = label_encoder.classes_
     report = classification_report(y_test, preds, target_names=class_names, digits=4)
@@ -94,6 +105,7 @@ def evaluate(clf, X_test, y_test, label_encoder):
     result_dir = os.path.join("results", "ML_results", f"rf_eval_{timestamp}")
     os.makedirs(result_dir, exist_ok=True)
 
+    # Save report
     report_file = os.path.join(result_dir, "report.txt")
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(f"Evaluation Timestamp: {timestamp}\n")
@@ -104,8 +116,9 @@ def evaluate(clf, X_test, y_test, label_encoder):
         f.write("\nFull Classification Report:\n")
         f.write(report)
 
-    print(f"Report saved to: {report_file}")
+    print(f"📄 Report saved to: {report_file}")
 
+    # Save confusion matrix
     cm_path = os.path.join(result_dir, "confmat.png")
     plot_confusion_matrix(
         y_true=y_test,
@@ -115,5 +128,8 @@ def evaluate(clf, X_test, y_test, label_encoder):
         title="SIFT + Random Forest Confusion Matrix",
         save_path=cm_path
     )
-    print(f"Confusion matrix saved to: {cm_path}")
+    print(f"🖼️ Confusion matrix saved to: {cm_path}")
+
+    # Print to console
+    print("\n📊 Classification Report:")
     print(report)

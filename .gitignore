@@ -9,3 +9,5 @@ archive/
 data/
 models/rf_classifier.joblib
 models/*.joblib
+cache/
+results/

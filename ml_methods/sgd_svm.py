@@ -13,7 +13,7 @@ import joblib
 CACHE_DIR = "cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-def extract_sift_features(image_path, max_descriptors=100):
+def extract_sift_features(image_path, max_descriptors=500):
     try:
         img = cv2.imread(image_path, 0)
         sift = cv2.SIFT_create()
@@ -21,17 +21,17 @@ def extract_sift_features(image_path, max_descriptors=100):
         if descriptors is None:
             return np.zeros((max_descriptors, 128)).flatten()
 
-        if descriptors.shape[0] > max_descriptors:
-            descriptors = descriptors[:max_descriptors]
-        else:
-            pad = np.zeros((max_descriptors - descriptors.shape[0], 128))
-            descriptors = np.vstack((descriptors, pad))
+        # if descriptors.shape[0] > max_descriptors:
+        #     descriptors = descriptors[:max_descriptors]
+        # else:
+        #     pad = np.zeros((max_descriptors - descriptors.shape[0], 128))
+        #     descriptors = np.vstack((descriptors, pad))
 
         return descriptors.flatten()
     except:
         return None
 
-def prepare_data(data_dir, max_descriptors=100, use_pca=True, pca_dim=100):
+def prepare_data(data_dir, max_descriptors=500, use_pca=True, pca_dim=300):
     cache_name = f"{'pca' if use_pca else 'nopca'}_{os.path.basename(data_dir)}_sift_{max_descriptors}.npz"
     cache_path = os.path.join(CACHE_DIR, cache_name)
 
