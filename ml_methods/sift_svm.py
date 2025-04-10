@@ -10,6 +10,7 @@ from tqdm import tqdm
 from utils.metrics import evaluate_classification, plot_confusion_matrix
 import time
 import joblib
+from tqdm import tqdm
 
 CACHE_DIR = "cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
@@ -76,22 +77,46 @@ def prepare_data(data_dir, max_descriptors=500, use_pca=True, pca_dim=300):
     return X, y, labels, pca_obj
 
 def train_svm(X_train, y_train):
-    print("\nTraining SVM classifier (SIFT + SVM)... This may take a few minutes.")
+    print("\n⚙️ Training SVM classifier (SIFT + SVM)... This may take a few minutes.")
+
     start_time = time.time()
-    
-    clf = SVC(kernel='linear', probability=True, verbose=1)
-    clf.fit(X_train, y_train)
+
+    # Verbose removed, tqdm used instead for cleaner CLI
+    clf = SVC(kernel='linear', probability=True, verbose=False)
+
+    # Fake progress bar for visual feel (since SVM doesn't expose training loop)
+    with tqdm(total=1, desc="🧠 Fitting SVM", ncols=100) as pbar:
+        clf.fit(X_train, y_train)
+        pbar.update(1)
 
     duration = time.time() - start_time
-    print(f"Training complete. Time taken: {duration:.2f} seconds.")
+    print(f"✅ Training complete. Time taken: {duration:.2f} seconds.")
 
     # Save model
     os.makedirs("models", exist_ok=True)
     model_path = "models/svm_classifier.joblib"
     joblib.dump(clf, model_path)
-    print(f"Model saved to: {model_path}")
+    print(f"💾 Model saved to: {model_path}")
 
     return clf
+
+# def train_svm(X_train, y_train):
+#     print("\nTraining SVM classifier (SIFT + SVM)... This may take a few minutes.")
+#     start_time = time.time()
+    
+#     clf = SVC(kernel='linear', probability=True, verbose=1)
+#     clf.fit(X_train, y_train)
+
+#     duration = time.time() - start_time
+#     print(f"Training complete. Time taken: {duration:.2f} seconds.")
+
+#     # Save model
+#     os.makedirs("models", exist_ok=True)
+#     model_path = "models/svm_classifier.joblib"
+#     joblib.dump(clf, model_path)
+#     print(f"Model saved to: {model_path}")
+
+#     return clf
 
 def evaluate(clf, X_test, y_test, label_encoder):
     print("\nEvaluating model...")
