@@ -1,0 +1,32 @@
+Evaluation Timestamp: 08-04-2025_16-17-22
+Model: ResNet-18 (fine-tuned)
+Device: cpu
+
+Summary Metrics:
+  accuracy: 0.9146
+  precision_macro: 0.9154
+  recall_macro: 0.9146
+  f1_macro: 0.9147
+
+Full Classification Report:
+              precision    recall  f1-score   support
+
+ Agriculture     0.9053    0.9563    0.9301       160
+     Airport     0.8405    0.8562    0.8483       160
+       Beach     0.9012    0.9125    0.9068       160
+        City     0.9114    0.9000    0.9057       160
+      Desert     0.9625    0.9625    0.9625       160
+      Forest     0.9677    0.9375    0.9524       160
+   Grassland     0.9080    0.9250    0.9164       160
+     Highway     0.9416    0.9062    0.9236       160
+        Lake     0.8795    0.9125    0.8957       160
+    Mountain     0.9506    0.9625    0.9565       160
+     Parking     0.9497    0.9437    0.9467       160
+        Port     0.9306    0.8375    0.8816       160
+     Railway     0.8580    0.8688    0.8634       160
+ Residential     0.9679    0.9437    0.9557       160
+       River     0.8563    0.8938    0.8746       160
+
+    accuracy                         0.9146      2400
+   macro avg     0.9154    0.9146    0.9147      2400
+weighted avg     0.9154    0.9146    0.9147      2400
