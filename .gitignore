@@ -10,3 +10,4 @@ data/
 models/rf_classifier.joblib
 models/*.joblib
 cache/
+clip_model/

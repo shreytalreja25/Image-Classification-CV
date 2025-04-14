@@ -14,6 +14,10 @@ def run_rf():
     print("\nRunning ML Pipeline (SIFT + Random Forest)...\n")
     os.system("python main_rf.py")
 
+def run_xgb():
+    print("\nRunning ML Pipeline (SIFT + XGBoost)...\n")
+    os.system("python main_xgb.py")
+
 def run_dl():
     print("\nRunning Deep Learning Pipeline (ResNet-18)...\n")
     os.system("python main_dl.py")
@@ -54,6 +58,14 @@ def run_gradcam():
     else:
         print("Invalid choice. Returning to main menu.\n")
 
+def run_finetune_llm():
+    print("\n🧠 Finetuning CLIP LLM on aerial landscape dataset...\n")
+    os.system("python LLM_method\clip_finetune.py")
+
+def run_llm_inference():
+    print("\n🤖 Running CLIP LLM inference on 10 images per category...\n")
+    os.system("python LLM_method\clip_infer_save.py")
+
 def show_info():
     print("\nCOMP9517 CV Group Project")
     print("-" * 30)
@@ -62,10 +74,15 @@ def show_info():
     print("  • SIFT + SVM")
     print("  • SIFT + SGDClassifier")
     print("  • SIFT + Random Forest")
+    print("  • SIFT + XGBoost")
     print("  • ResNet-18")
     print("  • EfficientNet-B0")
     print("  • MobileNetV2")
-    print("Visualizations: Grad-CAM for all DL models")
+    print("  • CLIP LLM (Finetuned on aerial images)")
+    print("\nVisualizations:")
+    print("  • Grad-CAM for all DL models")
+    print("\nReports:")
+    print("  • All reports & confusion matrices saved in 'results/'")
     print("Due: 25 April 2025\n")
 
 def main_menu():
@@ -75,14 +92,17 @@ def main_menu():
         print("2.  Run ML Pipeline (SIFT + SVM)")
         print("3.  Run ML Pipeline (SIFT + SGDClassifier)")
         print("4.  Run ML Pipeline (SIFT + Random Forest)")
-        print("5.  Run DL Pipeline (ResNet-18)")
-        print("6.  Run DL Pipeline (EfficientNet-B0)")
-        print("7.  Run DL Pipeline (MobileNetV2)")
-        print("8.  Generate Grad-CAM Visualizations")
-        print("9.  Project Info")
-        print("10. Exit")
+        print("5.  Run ML Pipeline (SIFT + XGBoost)")
+        print("6.  Run DL Pipeline (ResNet-18)")
+        print("7.  Run DL Pipeline (EfficientNet-B0)")
+        print("8.  Run DL Pipeline (MobileNetV2)")
+        print("9.  Generate Grad-CAM Visualizations")
+        print("10. Finetune CLIP LLM Model")
+        print("11. Run CLIP LLM Inference (10 images/class)")
+        print("12. Project Info")
+        print("13. Exit")
 
-        choice = input("Enter your choice (1–10): ")
+        choice = input("Enter your choice (1–13): ")
 
         if choice == '1':
             split_data()
@@ -93,16 +113,22 @@ def main_menu():
         elif choice == '4':
             run_rf()
         elif choice == '5':
-            run_dl()
+            run_xgb()
         elif choice == '6':
-            run_efficientnet()
+            run_dl()
         elif choice == '7':
-            run_mobilenet()
+            run_efficientnet()
         elif choice == '8':
-            run_gradcam()
+            run_mobilenet()
         elif choice == '9':
-            show_info()
+            run_gradcam()
         elif choice == '10':
+            run_finetune_llm()
+        elif choice == '11':
+            run_llm_inference()
+        elif choice == '12':
+            show_info()
+        elif choice == '13':
             print("Exiting...")
             time.sleep(1)
             break

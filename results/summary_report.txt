@@ -1,5 +1,22 @@
 Model                                           | Accuracy | Macro F1 | Timestamp          
 ------------------------------------------------|----------|----------|--------------------
+SIFT + Random Forest                            | 23.54%   | 22.07%   | 10-04-2025_17-03-53
+MobileNetV2                                     | 93.00%   | 93.02%   | 10-04-2025_17-10-01
 EfficientNet-B0 (fine-tuned)                    | 95.46%   | 95.45%   | 25-03-2025_09-06-31
 SIFT + SGDClassifier (Linear SVM Approximation) | 14.17%   | 13.53%   | 25-03-2025_09-23-47
 ResNet-18 (fine-tuned)                          | 90.71%   | 90.68%   | 25-03-2025_09-29-41
+
+----- XGBoost Evaluation (14-04-2025_22-44-15) -----
+accuracy: 0.2567
+precision_macro: 0.2471
+recall_macro: 0.2567
+f1_macro: 0.2476
+
+----- CLIP LLM Evaluation (15-04-2025_00-14-44) -----
+Accuracy: 78.00%
+
+----- CLIP LLM Evaluation (15-04-2025_00-15-26) -----
+Accuracy: 84.00%
+
+----- CLIP LLM Evaluation (15-04-2025_00-15-40) -----
+Accuracy: 81.33%

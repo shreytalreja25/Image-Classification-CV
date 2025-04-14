@@ -1,0 +1,31 @@
+Evaluation Timestamp: 14-04-2025_22-27-38
+Model: SIFT + Random Forest (Tuned)
+
+Summary Metrics:
+  accuracy: 0.2338
+  precision_macro: 0.2181
+  recall_macro: 0.2338
+  f1_macro: 0.2192
+
+Full Classification Report:
+              precision    recall  f1-score   support
+
+ Agriculture     0.2520    0.3875    0.3054       160
+     Airport     0.1299    0.0625    0.0844       160
+       Beach     0.1597    0.1187    0.1362       160
+        City     0.1554    0.1875    0.1700       160
+      Desert     0.4333    0.2437    0.3120       160
+      Forest     0.5082    0.7750    0.6139       160
+   Grassland     0.3784    0.4375    0.4058       160
+     Highway     0.2500    0.2125    0.2297       160
+        Lake     0.0536    0.0375    0.0441       160
+    Mountain     0.1457    0.1812    0.1616       160
+     Parking     0.2323    0.2250    0.2286       160
+        Port     0.1635    0.2125    0.1848       160
+     Railway     0.1226    0.1187    0.1206       160
+ Residential     0.2316    0.2750    0.2514       160
+       River     0.0549    0.0312    0.0398       160
+
+    accuracy                         0.2338      2400
+   macro avg     0.2181    0.2338    0.2192      2400
+weighted avg     0.2181    0.2338    0.2192      2400
