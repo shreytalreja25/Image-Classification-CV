@@ -11,3 +11,4 @@ models/rf_classifier.joblib
 models/*.joblib
 cache/
 clip_model/
+old_cache/
