@@ -30,6 +30,10 @@ def run_mobilenet():
     print("\nRunning MobileNetV2 Pipeline...\n")
     os.system("python main_mobilenet.py")
 
+def run_densenet():
+    print("\nRunning DL Pipeline (DenseNet-121)...\n")
+    os.system("python main_densenet.py")
+
 def split_data():
     print("\nSplitting Dataset into Train/Test...\n")
     from utils.dataset_utils import split_dataset
@@ -41,30 +45,28 @@ def run_gradcam():
     print("1. ResNet-18")
     print("2. EfficientNet-B0")
     print("3. MobileNetV2")
-    model_choice = input("Choose model for Grad-CAM (1–3): ")
-
+    choice = input("Choose model for Grad-CAM (1–3): ")
     from dl_methods.generate_all_gradcams import (
         run_batch_gradcam,
         run_batch_gradcam_efficientnet,
         run_batch_gradcam_mobilenet
     )
-
-    if model_choice == '1':
+    if choice == '1':
         run_batch_gradcam()
-    elif model_choice == '2':
+    elif choice == '2':
         run_batch_gradcam_efficientnet()
-    elif model_choice == '3':
+    elif choice == '3':
         run_batch_gradcam_mobilenet()
     else:
         print("Invalid choice. Returning to main menu.\n")
 
 def run_finetune_llm():
     print("\n🧠 Finetuning CLIP LLM on aerial landscape dataset...\n")
-    os.system("python LLM_method\clip_finetune.py")
+    os.system("python LLM_method/clip_finetune.py")
 
 def run_llm_inference():
     print("\n🤖 Running CLIP LLM inference on 10 images per category...\n")
-    os.system("python LLM_method\clip_infer_save.py")
+    os.system("python LLM_method/clip_infer_save.py")
 
 def show_info():
     print("\nCOMP9517 CV Group Project")
@@ -78,6 +80,7 @@ def show_info():
     print("  • ResNet-18")
     print("  • EfficientNet-B0")
     print("  • MobileNetV2")
+    print("  • DenseNet-121")
     print("  • CLIP LLM (Finetuned on aerial images)")
     print("\nVisualizations:")
     print("  • Grad-CAM for all DL models")
@@ -96,13 +99,14 @@ def main_menu():
         print("6.  Run DL Pipeline (ResNet-18)")
         print("7.  Run DL Pipeline (EfficientNet-B0)")
         print("8.  Run DL Pipeline (MobileNetV2)")
-        print("9.  Generate Grad-CAM Visualizations")
-        print("10. Finetune CLIP LLM Model")
-        print("11. Run CLIP LLM Inference (10 images/class)")
-        print("12. Project Info")
-        print("13. Exit")
+        print("9.  Run DL Pipeline (DenseNet-121)")
+        print("10. Generate Grad-CAM Visualizations")
+        print("11. Finetune CLIP LLM Model")
+        print("12. Run CLIP LLM Inference (10 images/class)")
+        print("13. Project Info")
+        print("14. Exit")
 
-        choice = input("Enter your choice (1–13): ")
+        choice = input("Enter your choice (1–14): ")
 
         if choice == '1':
             split_data()
@@ -121,14 +125,16 @@ def main_menu():
         elif choice == '8':
             run_mobilenet()
         elif choice == '9':
-            run_gradcam()
+            run_densenet()
         elif choice == '10':
-            run_finetune_llm()
+            run_gradcam()
         elif choice == '11':
-            run_llm_inference()
+            run_finetune_llm()
         elif choice == '12':
-            show_info()
+            run_llm_inference()
         elif choice == '13':
+            show_info()
+        elif choice == '14':
             print("Exiting...")
             time.sleep(1)
             break

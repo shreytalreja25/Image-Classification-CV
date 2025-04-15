@@ -20,3 +20,15 @@ Accuracy: 84.00%
 
 ----- CLIP LLM Evaluation (15-04-2025_00-15-40) -----
 Accuracy: 81.33%
+
+----- CLIP LLM Evaluation (15-04-2025_00-52-46) -----
+Accuracy: 78.67%
+
+----- CLIP LLM Evaluation (15-04-2025_01-15-42) -----
+Accuracy: 79.93%
+
+----- XGBoost Evaluation (15-04-2025_02-04-59) -----
+accuracy: 0.2512
+precision_macro: 0.2380
+recall_macro: 0.2512
+f1_macro: 0.2396

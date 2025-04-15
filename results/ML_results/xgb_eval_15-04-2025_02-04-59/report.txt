@@ -1,0 +1,31 @@
+Evaluation Timestamp: 15-04-2025_02-04-59
+Model: SIFT + XGBoost
+
+Summary Metrics:
+  accuracy: 0.2512
+  precision_macro: 0.2380
+  recall_macro: 0.2512
+  f1_macro: 0.2396
+
+Full Classification Report:
+              precision    recall  f1-score   support
+
+ Agriculture     0.2667    0.3500    0.3027       160
+     Airport     0.1266    0.0625    0.0837       160
+       Beach     0.2443    0.2000    0.2199       160
+        City     0.0994    0.1062    0.1027       160
+      Desert     0.4146    0.3187    0.3604       160
+      Forest     0.5517    0.8000    0.6531       160
+   Grassland     0.4564    0.4250    0.4401       160
+     Highway     0.3088    0.2625    0.2838       160
+        Lake     0.0758    0.0625    0.0685       160
+    Mountain     0.2000    0.3000    0.2400       160
+     Parking     0.2358    0.3125    0.2688       160
+        Port     0.2000    0.2562    0.2247       160
+     Railway     0.0974    0.0938    0.0955       160
+ Residential     0.2109    0.1688    0.1875       160
+       River     0.0816    0.0500    0.0620       160
+
+    accuracy                         0.2512      2400
+   macro avg     0.2380    0.2512    0.2396      2400
+weighted avg     0.2380    0.2512    0.2396      2400

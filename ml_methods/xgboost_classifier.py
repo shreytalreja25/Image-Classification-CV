@@ -1,35 +1,42 @@
-import os
-from sklearn.metrics import classification_report
-from sklearn.preprocessing import LabelEncoder
-from datetime import datetime
-from utils.metrics import evaluate_classification, plot_confusion_matrix
-import joblib
-from xgboost import XGBClassifier
-from ml_methods.random_forest import prepare_data as base_prepare_data
-from tqdm import tqdm
+# ml_methods/xgboost_classifier.py
 
-def prepare_data(data_dir, use_pca=True):
-    # Skip cache by forcing base_prepare_data to recalculate every time
+import os
+import shutil
+import joblib
+from datetime import datetime
+from xgboost import XGBClassifier
+from sklearn.metrics import classification_report
+from utils.metrics import evaluate_classification, plot_confusion_matrix
+from ml_methods.random_forest import prepare_data as base_prepare_data, CACHE_DIR
+
+def _clear_cache(data_dir, max_descriptors):
+    """
+    Remove any existing cache file for this dataset so features are re-extracted.
+    """
+    # Cache filenames follow: "{pca|nopca}_{basename}_rf_sift_{max_descriptors}.npz"
+    basename = os.path.basename(data_dir)
+    for fname in os.listdir(CACHE_DIR):
+        if fname.endswith(f"{basename}_rf_sift_{max_descriptors}.npz"):
+            os.remove(os.path.join(CACHE_DIR, fname))
+
+def prepare_data(data_dir, max_descriptors=200, use_pca=True, pca_dim=256):
+    """
+    Force fresh SIFT+PCA extraction by clearing cache first.
+    """
+    _clear_cache(data_dir, max_descriptors)
     return base_prepare_data(
         data_dir,
-        max_descriptors=200,
+        max_descriptors=max_descriptors,
         use_pca=use_pca,
-        pca_dim=256,
-        force_recalc=True  # 🔥 forces fresh SIFT extraction
+        pca_dim=pca_dim
     )
 
 def train_xgb(X_train, y_train):
-    print("\n🚀 Training XGBoost classifier with tqdm progress bar...\n")
-    
-    # Manual tqdm bar since xgboost doesn't integrate natively
+    """
+    Train XGBoost with verbose progress updates.
+    """
+    print("\n🚀 Training XGBoost classifier with progress updates...\n")
     total_trees = 300
-    progress = tqdm(total=total_trees, desc="🌲 Boosting Trees", ncols=80)
-
-    class TqdmCallback:
-        def __init__(self, tqdm_bar):
-            self.tqdm_bar = tqdm_bar
-        def __call__(self, env):
-            self.tqdm_bar.update(1)
 
     clf = XGBClassifier(
         n_estimators=total_trees,
@@ -38,17 +45,12 @@ def train_xgb(X_train, y_train):
         subsample=0.8,
         colsample_bytree=0.8,
         eval_metric='mlogloss',
-        verbosity=0  # silence default logging
+        use_label_encoder=False,
+        verbosity=0  # silence internal logs; we'll use fit(verbose)
     )
 
-    # Use tqdm callback
-    clf.fit(
-        X_train,
-        y_train,
-        eval_set=[(X_train, y_train)],
-        callbacks=[TqdmCallback(progress)]
-    )
-    progress.close()
+    # prints a line every 10 trees
+    clf.fit(X_train, y_train, verbose=10)
     print("✅ Training complete.")
 
     os.makedirs("models", exist_ok=True)
@@ -58,6 +60,9 @@ def train_xgb(X_train, y_train):
     return clf
 
 def evaluate(clf, X_test, y_test, label_encoder):
+    """
+    Evaluate and save report, confusion matrix, and append summary.
+    """
     print("\n📊 Evaluating XGBoost model...")
     preds = clf.predict(X_test)
     class_names = label_encoder.classes_
@@ -68,7 +73,7 @@ def evaluate(clf, X_test, y_test, label_encoder):
     result_dir = os.path.join("results", "ML_results", f"xgb_eval_{timestamp}")
     os.makedirs(result_dir, exist_ok=True)
 
-    # Save detailed report
+    # Detailed report
     report_path = os.path.join(result_dir, "report.txt")
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(f"Evaluation Timestamp: {timestamp}\n")
@@ -80,7 +85,7 @@ def evaluate(clf, X_test, y_test, label_encoder):
         f.write(report)
     print(f"📄 Report saved to: {report_path}")
 
-    # Save confusion matrix
+    # Confusion matrix
     conf_path = os.path.join(result_dir, "confmat.png")
     plot_confusion_matrix(
         y_true=y_test,
@@ -100,5 +105,6 @@ def evaluate(clf, X_test, y_test, label_encoder):
             f.write(f"{k}: {v:.4f}\n")
     print(f"📌 Summary appended to: {summary_path}")
 
+    # Console output
     print("\n📊 Classification Report:")
     print(report)

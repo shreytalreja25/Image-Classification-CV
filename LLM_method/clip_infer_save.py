@@ -37,7 +37,7 @@ print("🧪 Running inference on 10 images per category...")
 for category in categories:
     cat_dir = os.path.join(DATA_PATH, category)
     images = [img for img in os.listdir(cat_dir) if img.lower().endswith((".jpg", ".png"))]
-    sample_images = random.sample(images, min(10, len(images)))
+    sample_images = random.sample(images, min(100, len(images)))
 
     report_lines.append(f"Category: {category}")
     for img in sample_images:
