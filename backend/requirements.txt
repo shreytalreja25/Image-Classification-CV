@@ -1,0 +1,77 @@
+# FastAPI and ASGI server
+fastapi
+uvicorn[standard]
+
+# Environment and configuration
+python-dotenv
+pydantic
+pydantic-settings
+
+# Database
+pymongo
+motor
+
+# Machine Learning and Computer Vision
+torch
+torchvision
+torchaudio
+opencv-python
+pillow
+numpy
+scikit-learn
+scipy
+
+# Utilities
+python-multipart
+aiofiles
+python-jose[cryptography]
+passlib[bcrypt]
+requests
+httpx
+
+# WebSocket support
+websockets
+
+# Development and testing
+pytest
+pytest-asyncio
+pytest-cov
+
+# Logging
+loguru
+
+# CORS
+fastapi-cors
+
+# Async support
+aio-pika
+
+# Data validation
+marshmallow
+
+# Serialization
+orjson
+
+# Security
+cryptography
+bcrypt
+
+# Monitoring and health checks
+healthcheck
+
+# Caching
+redis
+aioredis
+
+# Task queue
+celery
+
+# Documentation
+mkdocs
+mkdocs-material
+
+# Type checking
+mypy
+types-requests
+types-PyYAML
+types-Pillow
