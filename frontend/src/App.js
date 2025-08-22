@@ -15,11 +15,11 @@ import Settings from './components/Settings';
 
 // Placeholder components for routes not yet implemented
 const PlaceholderComponent = ({ title, description }) => (
-  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+  <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
     <div className="text-center">
       <div className="text-6xl mb-4">🚧</div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
-      <p className="text-gray-600">{description}</p>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+      <p className="text-gray-600 dark:text-gray-400">{description}</p>
     </div>
   </div>
 );
@@ -56,99 +56,108 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
         <Navigation />
         
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route 
-              path="/" 
-              element={
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Dashboard />
-                </motion.div>
-              } 
-            />
-            
-            <Route 
-              path="/test-image" 
-              element={
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <TestImage />
-                </motion.div>
-              } 
-            />
-            
-            <Route 
-              path="/models" 
-              element={
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Models />
-                </motion.div>
-              } 
-            />
-            
-            <Route 
-              path="/training" 
-              element={
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Training />
-                </motion.div>
-              } 
-            />
-            
-            <Route 
-              path="/analytics" 
-              element={
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Analytics />
-                </motion.div>
-              } 
-            />
-            
-            <Route 
-              path="/settings" 
-              element={
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Settings />
-                </motion.div>
-              } 
-            />
-            
-            {/* Redirect unknown routes to dashboard */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </AnimatePresence>
+        {/* Main content area with proper spacing */}
+        <main className="lg:ml-80 lg:pt-6">
+          <AnimatePresence mode="wait">
+            <Routes>
+              <Route 
+                path="/" 
+                element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="px-6"
+                  >
+                    <Dashboard />
+                  </motion.div>
+                } 
+              />
+              
+              <Route 
+                path="/test-image" 
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="px-6"
+                  >
+                    <TestImage />
+                  </motion.div>
+                } 
+              />
+              
+              <Route 
+                path="/models" 
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="px-6"
+                  >
+                    <Models />
+                  </motion.div>
+                } 
+              />
+              
+              <Route 
+                path="/training" 
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="px-6"
+                  >
+                    <Training />
+                  </motion.div>
+                } 
+              />
+              
+              <Route 
+                path="/analytics" 
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="px-6"
+                  >
+                    <Analytics />
+                  </motion.div>
+                } 
+              />
+              
+              <Route 
+                path="/settings" 
+                element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="px-6"
+                  >
+                    <Settings />
+                  </motion.div>
+                } 
+              />
+              
+              {/* Redirect to dashboard for unknown routes */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </AnimatePresence>
+        </main>
       </div>
     </Router>
   );

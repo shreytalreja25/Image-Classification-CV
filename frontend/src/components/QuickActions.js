@@ -69,89 +69,76 @@ const QuickActions = () => {
   const getColorClasses = (color) => {
     const colors = {
       primary: {
-        bg: 'bg-primary-50',
-        text: 'text-primary-600',
-        border: 'border-primary-200',
-        iconBg: 'bg-primary-100',
-        hover: 'hover:bg-primary-100'
+        bg: 'bg-primary-50 dark:bg-primary-900/20',
+        text: 'text-primary-600 dark:text-primary-400',
+        border: 'border-primary-200 dark:border-primary-700',
+        iconBg: 'bg-primary-100 dark:bg-primary-800',
+        hover: 'hover:bg-primary-100 dark:hover:bg-primary-900/30'
       },
       success: {
-        bg: 'bg-success-50',
-        text: 'text-success-600',
-        border: 'border-success-200',
-        iconBg: 'bg-success-100',
-        hover: 'hover:bg-success-100'
+        bg: 'bg-success-50 dark:bg-success-900/20',
+        text: 'text-success-600 dark:text-success-400',
+        border: 'border-success-200 dark:border-success-700',
+        iconBg: 'bg-success-100 dark:bg-success-800',
+        hover: 'hover:bg-success-100 dark:hover:bg-success-900/30'
       },
       warning: {
-        bg: 'bg-warning-50',
-        text: 'text-warning-600',
-        border: 'border-warning-200',
-        iconBg: 'bg-warning-100',
-        hover: 'hover:bg-warning-100'
+        bg: 'bg-warning-50 dark:bg-warning-900/20',
+        text: 'text-warning-600 dark:text-warning-400',
+        border: 'border-warning-200 dark:border-warning-700',
+        iconBg: 'bg-warning-100 dark:bg-warning-800',
+        hover: 'hover:bg-warning-100 dark:hover:bg-warning-900/30'
       },
       secondary: {
-        bg: 'bg-secondary-50',
-        text: 'text-secondary-600',
-        border: 'border-secondary-200',
-        iconBg: 'bg-secondary-100',
-        hover: 'hover:bg-secondary-100'
+        bg: 'bg-secondary-50 dark:bg-secondary-900/20',
+        text: 'text-secondary-600 dark:text-secondary-400',
+        border: 'border-secondary-200 dark:border-secondary-700',
+        iconBg: 'bg-secondary-100 dark:bg-secondary-800',
+        hover: 'hover:bg-secondary-100 dark:hover:bg-secondary-900/30'
       }
     };
     return colors[color] || colors.primary;
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-        <RefreshCw className="w-5 h-5 mr-2 text-primary-500" />
-        Quick Actions
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+        ⚡ Quick Actions
       </h3>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-3">
         {actions.map((action, index) => {
+          const Icon = action.icon;
           const colorClasses = getColorClasses(action.color);
           
           return (
             <motion.button
               key={action.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              whileHover={{ y: -2, scale: 1.02 }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={action.action}
               disabled={action.disabled}
-              className={`p-4 rounded-lg border ${colorClasses.border} ${colorClasses.bg} ${colorClasses.hover} transition-all duration-200 text-left disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`w-full p-3 rounded-lg border transition-all duration-200 ${colorClasses.bg} ${colorClasses.border} ${colorClasses.hover} ${action.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center mb-2">
-                    <div className={`p-2 rounded-lg ${colorClasses.iconBg} mr-3`}>
-                      <action.icon className={`w-5 h-5 ${colorClasses.text}`} />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-medium text-gray-900">{action.title}</h4>
-                      {action.badge && (
-                        <span className="inline-block px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full ml-2">
-                          {action.badge}
-                        </span>
-                      )}
-                    </div>
+              <div className="flex items-center space-x-3">
+                <div className={`p-2 rounded-lg ${colorClasses.iconBg}`}>
+                  <Icon className={`w-5 h-5 ${colorClasses.text}`} />
+                </div>
+                <div className="flex-1 text-left">
+                  <div className="flex items-center">
+                    <span className={`font-medium ${colorClasses.text}`}>{action.title}</span>
+                    {action.badge && (
+                      <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-800 text-primary-800 dark:text-primary-200">
+                        {action.badge}
+                      </span>
+                    )}
                   </div>
-                  <p className="text-sm text-gray-600">{action.description}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{action.description}</p>
                 </div>
               </div>
             </motion.button>
           );
         })}
-      </div>
-
-      {/* Additional Info */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-        <div className="flex items-center text-sm text-gray-600">
-          <Upload className="w-4 h-4 mr-2" />
-          <span>Drag and drop images here for quick classification</span>
-        </div>
       </div>
     </div>
   );

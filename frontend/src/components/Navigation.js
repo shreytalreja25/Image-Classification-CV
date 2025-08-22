@@ -68,9 +68,11 @@ const Navigation = () => {
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
     setDarkMode(savedDarkMode);
     
-    // Apply dark mode class
+    // Apply dark mode class immediately
     if (savedDarkMode) {
       document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
@@ -79,6 +81,7 @@ const Navigation = () => {
     setDarkMode(newDarkMode);
     localStorage.setItem('darkMode', newDarkMode);
     
+    // Apply dark mode class to document
     if (newDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
@@ -118,9 +121,9 @@ const Navigation = () => {
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 bg-white rounded-lg shadow-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+          className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isOpen ? <X className="w-6 h-6 dark:text-white" /> : <Menu className="w-6 h-6 dark:text-white" />}
         </button>
       </div>
 
@@ -142,18 +145,18 @@ const Navigation = () => {
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed left-0 top-0 h-full w-80 bg-white shadow-xl z-50"
+              className="fixed left-0 top-0 h-full w-80 bg-white dark:bg-gray-900 shadow-xl z-50"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-8">
-                  <h1 className="text-2xl font-bold text-gray-900">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                     {config.appName}
                   </h1>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-5 h-5 dark:text-white" />
                   </button>
                 </div>
                 
@@ -177,17 +180,19 @@ const Navigation = () => {
       </AnimatePresence>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 lg:z-50">
-        <div className="flex flex-col flex-grow bg-white border-r border-gray-200 pt-5 pb-4 overflow-y-auto">
+      <div className="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 lg:z-30 lg:bg-white lg:dark:bg-gray-900 lg:border-r lg:border-gray-200 lg:dark:border-gray-700">
+        <div className="flex flex-col flex-grow pt-6 pb-4 overflow-y-auto">
+          {/* Header with proper spacing */}
           <div className="flex items-center flex-shrink-0 px-6 mb-8">
             <div className="flex items-center">
               <Brain className="w-8 h-8 text-primary-500 mr-3" />
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
                 {config.appName}
               </h1>
             </div>
           </div>
           
+          {/* Navigation items */}
           <nav className="flex-1 px-6 space-y-2">
             {navigationItems.map((item) => (
               <NavigationItem
@@ -200,10 +205,10 @@ const Navigation = () => {
           </nav>
 
           {/* Bottom section */}
-          <div className="px-6 py-4 border-t border-gray-200">
+          <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
             {/* WebSocket Status */}
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-gray-600">Connection Status</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Connection Status</span>
               <div className="flex items-center space-x-2">
                 <span className="text-sm">{getWsStatusIcon()}</span>
                 <span className={`text-sm ${getWsStatusColor()}`}>
@@ -215,22 +220,22 @@ const Navigation = () => {
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="flex items-center justify-between w-full p-3 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center justify-between w-full p-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <span>Dark Mode</span>
               {darkMode ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
 
             {/* App Version */}
-            <div className="text-xs text-gray-500 text-center mt-4">
+            <div className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4">
               v{config.appVersion}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main content margin for desktop */}
-      <div className="lg:ml-80" />
+      {/* Main content margin for desktop - ensures no overlap */}
+      <div className="hidden lg:block lg:w-80" />
     </>
   );
 };
@@ -245,25 +250,25 @@ const NavigationItem = ({ item, isActive, onClick }) => {
       onClick={onClick}
       className={`w-full flex items-center justify-between p-3 text-left rounded-lg transition-all duration-200 ${
         isActive
-          ? 'bg-primary-50 text-primary-700 border border-primary-200'
-          : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+          ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-700'
+          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
       }`}
     >
       <div className="flex items-center">
-        <Icon className={`w-5 h-5 mr-3 ${isActive ? 'text-primary-600' : 'text-gray-500'}`} />
+        <Icon className={`w-5 h-5 mr-3 ${isActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400'}`} />
         <div>
           <div className="flex items-center">
             <span className="font-medium">{item.name}</span>
             {item.badge && (
-              <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
+              <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-800 text-primary-800 dark:text-primary-200">
                 {item.badge}
               </span>
             )}
           </div>
-          <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{item.description}</p>
         </div>
       </div>
-      <ChevronRight className={`w-4 h-4 ${isActive ? 'text-primary-600' : 'text-gray-400'}`} />
+      <ChevronRight className={`w-4 h-4 ${isActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500'}`} />
     </motion.button>
   );
 };
