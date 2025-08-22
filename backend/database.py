@@ -1,5 +1,6 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
+from pymongo.errors import PyMongoError
 from typing import Optional, List
 import asyncio
 from datetime import datetime
@@ -10,10 +11,16 @@ class Database:
     sync_client: Optional[MongoClient] = None
 
 async def connect_to_mongo():
-    """Create database connection."""
-    Database.client = AsyncIOMotorClient(settings.mongodb_uri)
-    Database.sync_client = MongoClient(settings.mongodb_uri)
-    print("Connected to MongoDB.")
+    """Create database connection and verify connectivity with a ping."""
+    try:
+        Database.client = AsyncIOMotorClient(settings.mongodb_uri)
+        Database.sync_client = MongoClient(settings.mongodb_uri)
+        # Attempt a quick ping using the sync client to fail fast on SSL/creds issues
+        Database.sync_client.admin.command("ping")
+        print("Connected to MongoDB.")
+    except PyMongoError as exc:
+        # Keep app running; downstream features that need DB should handle None
+        print(f"MongoDB connection failed: {exc}")
 
 async def close_mongo_connection():
     """Close database connection."""
@@ -45,14 +52,15 @@ def get_sync_collection(collection_name: str):
 # Sample data for testing
 async def initialize_sample_data():
     """Initialize sample data for the application."""
-    db = get_database()
-    
-    # Check if data already exists
-    if await db.training_stats.count_documents({}) > 0:
-        return
-    
-    # Sample training statistics
-    sample_stats = [
+    try:
+        db = get_database()
+        # If DB is not connected, get_database() will raise; handle below
+        # Check if data already exists
+        if await db.training_stats.count_documents({}) > 0:
+            return
+
+        # Sample training statistics
+        sample_stats = [
         {
             "model_name": "EfficientNet-B0",
             "accuracy": 95.46,
@@ -90,9 +98,12 @@ async def initialize_sample_data():
             "status": "completed"
         }
     ]
-    
-    await db.training_stats.insert_many(sample_stats)
-    print("Sample data initialized.")
+
+        await db.training_stats.insert_many(sample_stats)
+        print("Sample data initialized.")
+    except Exception as exc:
+        # Do not block app startup if sample data cannot be created
+        print(f"Skipping sample data initialization due to DB error: {exc}")
 
 # Database models
 class TrainingStats:

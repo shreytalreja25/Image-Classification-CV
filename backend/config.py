@@ -46,7 +46,7 @@ class Settings(BaseSettings):
     @property
     def frontend_url(self) -> str:
         """Get the appropriate frontend URL based on dev mode"""
-        return self.local_frontend_url if self.dev_mode else self.production_backend_url
+        return self.local_frontend_url if self.dev_mode else self.production_frontend_url
     
     @property
     def cors_origins(self) -> List[str]:
