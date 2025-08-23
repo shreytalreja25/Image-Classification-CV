@@ -1,6 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 from pymongo.errors import PyMongoError
+import certifi
 from typing import Optional, List
 import asyncio
 from datetime import datetime
@@ -13,8 +14,17 @@ class Database:
 async def connect_to_mongo():
     """Create database connection and verify connectivity with a ping."""
     try:
-        Database.client = AsyncIOMotorClient(settings.mongodb_uri)
-        Database.sync_client = MongoClient(settings.mongodb_uri)
+        ca_bundle_path = certifi.where()
+        Database.client = AsyncIOMotorClient(
+            settings.mongodb_uri,
+            tls=True,
+            tlsCAFile=ca_bundle_path,
+        )
+        Database.sync_client = MongoClient(
+            settings.mongodb_uri,
+            tls=True,
+            tlsCAFile=ca_bundle_path,
+        )
         # Attempt a quick ping using the sync client to fail fast on SSL/creds issues
         Database.sync_client.admin.command("ping")
         print("Connected to MongoDB.")

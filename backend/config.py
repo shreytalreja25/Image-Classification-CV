@@ -25,7 +25,8 @@ class Settings(BaseSettings):
     
     # Model and Dataset Paths
     model_path: str = "./models/"
-    dataset_path: str = "./subset/"
+    # Point one level up so running from backend/ finds ../subset
+    dataset_path: str = "../subset/"
     
     # CORS Configuration - Store as string and parse to list
     allowed_origins: str = "http://localhost:3000,https://your-frontend.vercel.app"
