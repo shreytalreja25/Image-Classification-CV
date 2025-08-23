@@ -46,13 +46,20 @@ class Settings(BaseSettings):
     @property
     def frontend_url(self) -> str:
         """Get the appropriate frontend URL based on dev mode"""
-        return self.local_frontend_url if self.dev_mode else self.production_frontend_url
+        return self.local_frontend_url if self.dev_mode else self.production_backend_url
     
     @property
     def cors_origins(self) -> List[str]:
         """Get CORS origins based on dev mode"""
         if self.dev_mode:
-            return ["http://localhost:3000", "http://127.0.0.1:3000"]
+            return [
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                "http://localhost:5173",
+                "http://127.0.0.1:5173",
+                "http://localhost:5174",
+                "http://127.0.0.1:5174",
+            ]
         # Parse the comma-separated string into a list
         return [origin.strip() for origin in self.allowed_origins.split(",")]
     
