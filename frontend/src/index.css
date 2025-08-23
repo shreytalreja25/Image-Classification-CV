@@ -1,3 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Optional: ensure base page has our background/text when Tailwind loads */
+:root {
+  color-scheme: light;
+}
