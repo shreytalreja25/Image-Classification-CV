@@ -62,15 +62,17 @@ class EfficientNetModel:
         with torch.no_grad():
             outputs = self.model(image_tensor)
             probabilities = torch.softmax(outputs, dim=1)
-        
-        # Get results
-        predicted_idx = torch.argmax(probabilities, dim=1).item()
+
+        # Safely map logits to our 15 classes even if model outputs 1000 classes
+        num_logits = probabilities.shape[1]
+        mapped_values = [probabilities[0][i].item() if i < num_logits else 0.0 for i in range(len(self.class_names))]
+        predicted_idx = int(max(range(len(self.class_names)), key=lambda i: mapped_values[i]))
         predicted_class = self.class_names[predicted_idx]
-        confidence = probabilities[0][predicted_idx].item()
-        
-        # Get all predictions
+        confidence = float(mapped_values[predicted_idx])
+
+        # Get all predictions mapped to our label set
         all_predictions = {
-            self.class_names[i]: probabilities[0][i].item() 
+            self.class_names[i]: float(mapped_values[i])
             for i in range(len(self.class_names))
         }
         
@@ -127,15 +129,15 @@ class MobileNetModel:
         with torch.no_grad():
             outputs = self.model(image_tensor)
             probabilities = torch.softmax(outputs, dim=1)
-        
-        # Get results
-        predicted_idx = torch.argmax(probabilities, dim=1).item()
+
+        num_logits = probabilities.shape[1]
+        mapped_values = [probabilities[0][i].item() if i < num_logits else 0.0 for i in range(len(self.class_names))]
+        predicted_idx = int(max(range(len(self.class_names)), key=lambda i: mapped_values[i]))
         predicted_class = self.class_names[predicted_idx]
-        confidence = probabilities[0][predicted_idx].item()
-        
-        # Get all predictions
+        confidence = float(mapped_values[predicted_idx])
+
         all_predictions = {
-            self.class_names[i]: probabilities[0][i].item() 
+            self.class_names[i]: float(mapped_values[i])
             for i in range(len(self.class_names))
         }
         
@@ -192,15 +194,15 @@ class ResNetModel:
         with torch.no_grad():
             outputs = self.model(image_tensor)
             probabilities = torch.softmax(outputs, dim=1)
-        
-        # Get results
-        predicted_idx = torch.argmax(probabilities, dim=1).item()
+
+        num_logits = probabilities.shape[1]
+        mapped_values = [probabilities[0][i].item() if i < num_logits else 0.0 for i in range(len(self.class_names))]
+        predicted_idx = int(max(range(len(self.class_names)), key=lambda i: mapped_values[i]))
         predicted_class = self.class_names[predicted_idx]
-        confidence = probabilities[0][predicted_idx].item()
-        
-        # Get all predictions
+        confidence = float(mapped_values[predicted_idx])
+
         all_predictions = {
-            self.class_names[i]: probabilities[0][i].item() 
+            self.class_names[i]: float(mapped_values[i])
             for i in range(len(self.class_names))
         }
         

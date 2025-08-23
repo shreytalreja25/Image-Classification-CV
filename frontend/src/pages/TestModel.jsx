@@ -32,7 +32,7 @@ export default function TestModel() {
     setPredicting(true);
     setError(null);
     try {
-      const data = await predict({ model_name: modelName });
+      const data = await predict({ model_name: modelName, image_url: img?.url });
       setResult(data);
     } catch (e) {
       setError(e?.message || "Prediction failed");

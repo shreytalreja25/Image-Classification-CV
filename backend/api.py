@@ -2,12 +2,14 @@ from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Depe
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.encoders import jsonable_encoder
 import json
 import uuid
 import os
 import random
 from datetime import datetime
 from typing import List, Dict, Any
+from urllib.parse import urlparse
 import asyncio
 
 from config import settings
@@ -116,16 +118,43 @@ async def get_model_info(model_name: str):
 async def make_prediction(request: PredictionRequest):
     """Make prediction using specified model"""
     try:
-        # For now, we'll use a sample image path
-        # In production, you'd handle file uploads or URLs
-        sample_image_path = os.path.join(settings.dataset_path, "test", "Agriculture", "001.jpg")
-        
-        if not os.path.exists(sample_image_path):
-            raise HTTPException(status_code=404, detail="Sample image not found")
+        # Resolve image path
+        image_path = None
+
+        # 1) If frontend passed an image_url served by our backend, map it back to disk
+        if request.image_url:
+            try:
+                parsed = urlparse(request.image_url)
+                path_parts = parsed.path.strip("/").split("/")
+                # Expect images/{category}/{filename}
+                if len(path_parts) >= 3 and path_parts[0] == "images":
+                    category = path_parts[1]
+                    filename = path_parts[2]
+                    candidate = os.path.join(settings.dataset_path, "test", category, filename)
+                    if os.path.exists(candidate):
+                        image_path = candidate
+            except Exception:
+                image_path = None
+
+        # 2) Otherwise, pick a random test image that exists
+        if image_path is None:
+            test_dir = os.path.join(settings.dataset_path, "test")
+            if not os.path.isdir(test_dir):
+                raise HTTPException(status_code=404, detail="Test dataset directory not found")
+            categories = [d for d in os.listdir(test_dir) if os.path.isdir(os.path.join(test_dir, d))]
+            if not categories:
+                raise HTTPException(status_code=404, detail="No categories found in test dataset")
+            category = random.choice(categories)
+            category_path = os.path.join(test_dir, category)
+            images = [f for f in os.listdir(category_path) if f.lower().endswith((".jpg", ".jpeg", ".png"))]
+            if not images:
+                raise HTTPException(status_code=404, detail=f"No images found in category {category}")
+            selected_image = random.choice(images)
+            image_path = os.path.join(category_path, selected_image)
         
         # Make prediction
         predicted_class, confidence, all_predictions, processing_time = model_factory.predict(
-            request.model_name, sample_image_path
+            request.model_name, image_path
         )
         
         # Create prediction response
@@ -137,7 +166,7 @@ async def make_prediction(request: PredictionRequest):
             all_predictions=all_predictions,
             processing_time=processing_time,
             timestamp=datetime.now(),
-            image_path=sample_image_path
+            image_path=image_path
         )
         
         # Save prediction to database
@@ -146,6 +175,9 @@ async def make_prediction(request: PredictionRequest):
         
         return prediction_response
         
+    except HTTPException as e:
+        # Propagate intended HTTP errors
+        raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
 
@@ -291,25 +323,21 @@ async def get_image(category: str, filename: str):
 # Error handlers
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=exc.status_code,
-        content=ErrorResponse(
-            error=exc.detail,
-            message=str(exc.detail),
-            timestamp=datetime.now().isoformat()
-        ).dict()
+    payload = ErrorResponse(
+        error=exc.detail,
+        message=str(exc.detail),
+        timestamp=datetime.now()
     )
+    return JSONResponse(status_code=exc.status_code, content=jsonable_encoder(payload))
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=500,
-        content=ErrorResponse(
-            error="Internal Server Error",
-            message=str(exc),
-            timestamp=datetime.now().isoformat()
-        ).dict()
+    payload = ErrorResponse(
+        error="Internal Server Error",
+        message=str(exc),
+        timestamp=datetime.now()
     )
+    return JSONResponse(status_code=500, content=jsonable_encoder(payload))
 
 if __name__ == "__main__":
     import uvicorn
